@@ -5,23 +5,7 @@ using namespace std;
 using namespace atcoder;
 
 #define rep(i, n) for(int i = 0; i < n; ++i)
-
-template <class T> ostream &operator<<(ostream &os, vector<T> P) {
-    for(int i = 0; i < P.size(); ++i) {
-        if(i > 0) { os << " "; }
-        os << P[i];
-    }
-    return os;
-}
-
-void solve();
- 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    solve();
-    return 0;
-}
+using P = pair<int, int>;
 
 // 連結成分内に見つからなければ、構築不可能
 void No() {
@@ -29,7 +13,7 @@ void No() {
     exit(0);
 }
  
-void solve() {
+int main() {
     int n;
     cin >> n;
     vector<int> p(n);
@@ -74,9 +58,11 @@ void solve() {
     };
  
     auto dfs1 = [&](auto f, int v, int pre = -1) -> void {
-        for(int u : g[v])
+        for(int u : g[v]) {
+            if(u == pre) continue;
             // 先に部分木を全て一致させる
-            if(u != pre) f(f, u, v);
+            f(f, u, v);
+        }
         // 連結成分内に見つからなければ、即終了
         if(!dfs2(dfs2, v, v)) No();
     };
@@ -86,5 +72,7 @@ void solve() {
         if(t.leader(i) == i) dfs1(dfs1, i);
     }
     cout << ans.size() << '\n';
-    cout << ans << '\n';
+    for (int x: ans) cout << x << '\n';
+    
+    return 0;
 }
